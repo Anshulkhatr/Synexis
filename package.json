@@ -2,7 +2,7 @@
   "name": "Synexis",
   "version": "1.0.0",
   "description": "**Synexis** is a modern AI-powered social media platform where creativity meets artificial intelligence. Users can generate AI art, share posts, follow creators, and engage with a community built entirely around machine-generated visuals.",
-  "main": "server.js",
+  "main": "server/server.js",
   "type": "module",
   "scripts": {
     "start": "node server/server.js",
