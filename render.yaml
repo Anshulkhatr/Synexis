@@ -2,16 +2,17 @@ services:
   - type: web
     name: synexis
     env: node
+    plan: free # Can be changed to 'starter' for better performance
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000 # Default Render port
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
-        generateValue: true
-      - key: GEMINI_API_KEY
         sync: false
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
@@ -19,5 +20,9 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
+      - key: CLOUDINARY_URL
+        sync: false
       - key: FREEPIK_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
