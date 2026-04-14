@@ -19,6 +19,11 @@ dotenv.config()
 const PORT = process.env.PORT || 5000
 const app = express()
 
+// Health Check for Render
+app.get("/health-check", (req, res) => {
+    res.status(200).json({ status: "UP", timestamp: new Date() })
+})
+
 
 // DB Connection
 connectDB()
@@ -50,6 +55,14 @@ app.use("/api/posts", postRoutes)
 
 // Saved Posts
 app.use("/api/saved-posts", savedPostsRoutes)
+
+// API 404 Handler - Catch-all for undefined API routes
+app.use("/api/*", (req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `API Route ${req.originalUrl} not found`
+    })
+})
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/dist")))

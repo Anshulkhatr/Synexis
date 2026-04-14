@@ -5,6 +5,7 @@ services:
     plan: free # Can be changed to 'starter' for better performance
     buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /health-check
     envVars:
       - key: NODE_ENV
         value: production
