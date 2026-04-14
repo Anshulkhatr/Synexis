@@ -28,6 +28,25 @@ const FAQS = [
     { q: "Can I sell my prompts?", a: "Yes! The community marketplace allows you to monetize your best prompt structures." }
 ];
 
+const STEPS = [
+    { title: "Imagine", desc: "Type any idea that comes to your mind, no matter how wild.", icon: Wand2, color: "text-violet-400", bg: "bg-violet-500/10" },
+    { title: "Generate", desc: "Our AI engines process your prompt in seconds.", icon: Zap, color: "text-fuchsia-400", bg: "bg-fuchsia-500/10" },
+    { title: "Share", desc: "Post your creation to the community and get feedback.", icon: Users, color: "text-indigo-400", bg: "bg-indigo-500/10" }
+];
+
+const STATS = [
+    { label: "Images Generated", value: "2.4M+", color: "from-violet-400 to-fuchsia-400" },
+    { label: "Active Creators", value: "85K+", color: "from-fuchsia-400 to-pink-400" },
+    { label: "Average Generation", value: "< 3s", color: "from-pink-400 to-indigo-400" },
+    { label: "User Satisfaction", value: "4.9/5", color: "from-indigo-400 to-violet-400" }
+];
+
+const TESTIMONIALS = [
+    { name: "Sarah Jenkins", role: "Concept Artist", quote: "Synexis has completely changed my workflow. The speed and quality are unlike anything else I've tried.", avatar: "https://i.pravatar.cc/150?u=sarah" },
+    { name: "David Chen", role: "UI Designer", quote: "The community here is so inspiring. I love how easy it is to discover new prompt techniques.", avatar: "https://i.pravatar.cc/150?u=david" },
+    { name: "Elena Rodriguez", role: "NFT Creator", quote: "The upscaling tools are a lifesaver. My art looks crisp and professional every time.", avatar: "https://i.pravatar.cc/150?u=elena" }
+];
+
 const TypewriterText = ({ text }) => {
   const [displayedText, setDisplayedText] = useState("");
   
@@ -162,6 +181,44 @@ const Landing = () => {
                 </motion.div>
             </main>
 
+            {/* NEW: How It Works Section */}
+            <section className="relative z-10 py-32 bg-transparent overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex flex-col items-center text-center mb-20">
+                        <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="px-4 py-1 rounded-full border border-violet-500/30 text-violet-400 text-xs font-bold mb-4 tracking-widest uppercase bg-violet-500/5">
+                            Process
+                        </motion.div>
+                        <h2 className="text-4xl md:text-6xl font-syne font-bold text-white mb-6">How it <span className="text-fuchsia-400">Works</span></h2>
+                        <p className="text-gray-400 max-w-2xl text-lg">Three simple steps to turn your wildest dreams into digital reality.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                        {/* Connecting Line (Desktop) */}
+                        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent hidden md:block -translate-y-12"></div>
+                        
+                        {STEPS.map((step, idx) => (
+                            <motion.div 
+                                key={idx}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.2 }}
+                                className="relative flex flex-col items-center text-center group"
+                            >
+                                <div className={`w-24 h-24 rounded-[2rem] ${step.bg} border border-white/10 flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 group-hover:border-white/20 shadow-xl`}>
+                                    <step.icon className={`w-10 h-10 ${step.color}`} />
+                                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white text-black font-bold flex items-center justify-center text-sm shadow-lg">
+                                        {idx + 1}
+                                    </div>
+                                </div>
+                                <h3 className="text-2xl font-syne font-bold text-white mb-4">{step.title}</h3>
+                                <p className="text-gray-400 leading-relaxed px-4">{step.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* NEW: Interactive Prompt Showcase */}
             <section className="relative z-10 py-32 bg-transparent text-center px-4">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-4xl mx-auto">
@@ -244,6 +301,29 @@ const Landing = () => {
                 </div>
             </section>
 
+            {/* NEW: Community Stats Section */}
+            <section className="relative z-10 py-24 border-b border-white/5 bg-black/20">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {STATS.map((stat, idx) => (
+                            <motion.div 
+                                key={idx}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="flex flex-col items-center md:items-start"
+                            >
+                                <span className={`text-4xl md:text-5xl font-syne font-extrabold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
+                                    {stat.value}
+                                </span>
+                                <span className="text-gray-500 font-medium text-sm tracking-widest uppercase">{stat.label}</span>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* NEW: Top Creators Marquee */}
             <section className="relative z-10 py-24 bg-transparent overflow-hidden">
                 <div className="text-center mb-16">
@@ -306,6 +386,37 @@ const Landing = () => {
                             <h3 className="text-2xl font-syne font-bold text-white mb-4">Curate Collections</h3>
                             <p className="text-gray-400 leading-relaxed text-lg">Organize your favorite generations into beautiful public or private moodboards.</p>
                         </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* NEW: Testimonials Section */}
+            <section className="relative z-10 py-32 bg-transparent overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 text-center">
+                    <h2 className="text-4xl md:text-5xl font-syne font-bold text-white mb-20 text-center">Loved by <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">thousands.</span></h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {TESTIMONIALS.map((t, idx) => (
+                            <motion.div 
+                                key={idx}
+                                initial={{ opacity: 0, x: idx === 0 ? -30 : idx === 2 ? 30 : 0, y: 20 }}
+                                whileInView={{ opacity: 1, x: 0, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: idx * 0.2 }}
+                                className="glass-card p-8 rounded-3xl text-left border-violet-500/10 hover:border-violet-500/30 transition-colors group"
+                            >
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-fuchsia-500/20 group-hover:border-fuchsia-500/50 transition-colors">
+                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold">{t.name}</h4>
+                                        <p className="text-gray-500 text-sm">{t.role}</p>
+                                    </div>
+                                </div>
+                                <p className="text-gray-300 italic leading-relaxed">"{t.quote}"</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -387,6 +498,39 @@ const Landing = () => {
                             </motion.div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* NEW: Newsletter Section */}
+            <section className="relative z-10 py-32 bg-transparent">
+                <div className="max-w-5xl mx-auto px-6">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="glass-card rounded-[3rem] p-12 text-center relative overflow-hidden border-white/5"
+                    >
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/10 rounded-full blur-[80px] -translate-y-12 translate-x-12"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-fuchsia-600/10 rounded-full blur-[80px] translate-y-12 -translate-x-12"></div>
+                        
+                        <div className="relative z-10">
+                            <Sparkles className="w-12 h-12 text-fuchsia-400 mx-auto mb-6" />
+                            <h2 className="text-4xl md:text-5xl font-syne font-bold text-white mb-6">Join the <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Revolution</span></h2>
+                            <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">Subscribe to our newsletter and get early access to new AI models and community insights.</p>
+                            
+                            <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
+                                <input 
+                                    type="email" 
+                                    placeholder="your@email.com" 
+                                    className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 focus:bg-white/10 transition-all font-medium"
+                                />
+                                <button className="px-8 py-4 rounded-2xl bg-white text-black font-bold hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/10">
+                                    Subscribe
+                                </button>
+                            </form>
+                            <p className="mt-6 text-gray-500 text-sm">Join 50,000+ creators. No spam, ever.</p>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
