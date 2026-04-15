@@ -57,7 +57,7 @@ app.use("/api/posts", postRoutes)
 app.use("/api/saved-posts", savedPostsRoutes)
 
 // API 404 Handler - Catch-all for undefined API routes
-app.use("/api/*", (req, res) => {
+app.use("/api/*path", (req, res) => {
     res.status(404).json({
         success: false,
         message: `API Route ${req.originalUrl} not found`
@@ -67,7 +67,7 @@ app.use("/api/*", (req, res) => {
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/dist")))
 
-    app.get("*", (req, res) => {
+    app.get("*path", (req, res) => {
         res.sendFile(path.resolve(__dirname, "../", "client", "dist", "index.html"))
     })
 } else {
