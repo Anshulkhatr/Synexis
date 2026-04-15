@@ -11,8 +11,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "install-client": "npm install --prefix client",
     "build-client": "npm run build --prefix client",
-    "build": "npm run install-client && npm run build-client",
-    "postinstall": "npm run build"
+    "build": "npm run install-client && npm run build-client"
   },
   "author": "",
   "license": "ISC",
