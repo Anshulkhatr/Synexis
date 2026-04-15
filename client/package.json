@@ -23,6 +23,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.1",
     "react-toastify": "^11.0.5",
+    "Synexis": "file:..",
     "tailwindcss": "^4.2.1",
     "vite": "^7.3.1"
   },
