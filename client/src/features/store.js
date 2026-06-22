@@ -5,7 +5,8 @@ import post from "./post/postSlice"
 import admin from "./admin/adminSlice"
 import notifications from "./notifications/notificationSlice"
 import savedPost from "./savedPost/savedPostSlice"
+import chat from "./chat/chatSlice"
 
 export const store = configureStore({
-    reducer: { auth, profile, post, admin, notifications, savedPost },
+    reducer: { auth, profile, post, admin, notifications, savedPost, chat },
 })

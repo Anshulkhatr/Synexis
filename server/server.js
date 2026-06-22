@@ -4,6 +4,8 @@ import express from "express"
 import dotenv from "dotenv"
 import colors from "colors"
 import connectDB from "./config/dbConfig.js"
+import http from "http"
+import { Server } from "socket.io"
 
 // Local Imports
 import errorHandler from "./middleware/errorHandler.js"
@@ -13,11 +15,83 @@ import profileRoutes from "./routes/profileRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import savedPostsRoutes from "./routes/savedPostRoutes.js"
+import chatRoutes from "./routes/chatRoutes.js"
+import Message from "./models/messageModel.js"
 
 dotenv.config()
 
 const PORT = process.env.PORT || 5000
 const app = express()
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+})
+
+// Socket.io Connection Logic
+const onlineUsers = new Map()
+
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`)
+
+    socket.on("register_user", (userId) => {
+        if (userId) {
+            onlineUsers.set(userId, socket.id)
+            console.log(`User registered: ${userId} with socket: ${socket.id}`)
+            io.emit("get_online_users", Array.from(onlineUsers.keys()))
+        }
+    })
+
+    socket.on("send_message", async (data) => {
+        const { sender, receiver, message } = data
+        try {
+            const newMessage = new Message({
+                sender,
+                receiver,
+                message
+            })
+            await newMessage.save()
+
+            const receiverSocketId = onlineUsers.get(receiver)
+            if (receiverSocketId) {
+                io.to(receiverSocketId).emit("receive_message", newMessage)
+            }
+            
+            socket.emit("message_sent", newMessage)
+        } catch (error) {
+            console.error("Socket error on send_message:", error)
+        }
+    })
+
+    socket.on("typing", (data) => {
+        const { sender, receiver } = data
+        const receiverSocketId = onlineUsers.get(receiver)
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("typing_status", { sender, isTyping: true })
+        }
+    })
+
+    socket.on("stop_typing", (data) => {
+        const { sender, receiver } = data
+        const receiverSocketId = onlineUsers.get(receiver)
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("typing_status", { sender, isTyping: false })
+        }
+    })
+
+    socket.on("disconnect", () => {
+        console.log(`User disconnected: ${socket.id}`)
+        for (let [userId, socketId] of onlineUsers.entries()) {
+            if (socketId === socket.id) {
+                onlineUsers.delete(userId)
+                break
+            }
+        }
+        io.emit("get_online_users", Array.from(onlineUsers.keys()))
+    })
+})
 
 // Health Check for Render
 app.get("/health-check", (req, res) => {
@@ -56,6 +130,9 @@ app.use("/api/posts", postRoutes)
 // Saved Posts
 app.use("/api/saved-posts", savedPostsRoutes)
 
+// Chat Routes
+app.use("/api/chat", chatRoutes)
+
 // API 404 Handler - Catch-all for undefined API routes
 app.use("/api/*path", (req, res) => {
     res.status(404).json({
@@ -82,6 +159,6 @@ if (process.env.NODE_ENV === "production") {
 // Error Handler
 app.use(errorHandler)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue.black)
 })

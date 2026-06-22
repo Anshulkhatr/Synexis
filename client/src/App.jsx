@@ -8,6 +8,7 @@ import Explore from './pages/Explore';
 import Generate from './pages/Generate';
 import Profile from './pages/Profile';
 import PostDetail from './pages/PostDetail';
+import Chat from './pages/Chat';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminPosts from './pages/admin/AdminPosts';
@@ -36,6 +37,7 @@ const App = () => {
  <Route path='explore' element={<Explore />} />
  <Route path='generate' element={<Generate />} />
  <Route path='profile/:username' element={<Profile />} />
+ <Route path='chat' element={<Chat />} />
  </Route>
 
 
