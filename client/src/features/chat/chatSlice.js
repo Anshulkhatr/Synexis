@@ -4,6 +4,7 @@ import chatService from './chatService';
 const initialState = {
     contacts: [],
     messages: [],
+    onlineUsers: [],
     contactsLoading: false,
     messagesLoading: false,
     chatError: false,
@@ -41,6 +42,9 @@ const chatSlice = createSlice({
             state.messages = [];
             state.chatError = false;
             state.chatErrorMessage = "";
+        },
+        setOnlineUsers: (state, action) => {
+            state.onlineUsers = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -74,5 +78,5 @@ const chatSlice = createSlice({
     }
 });
 
-export const { addMessage, resetChatState } = chatSlice.actions;
+export const { addMessage, resetChatState, setOnlineUsers } = chatSlice.actions;
 export default chatSlice.reducer;

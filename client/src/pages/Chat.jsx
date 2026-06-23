@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts, fetchMessages, addMessage } from '../features/chat/chatSlice';
 import { MessageSquare, Send, Search, Smile, Circle, ArrowLeft, Sparkles } from 'lucide-react';
-import { io } from 'socket.io-client';
+import socket from '../config/socket';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
@@ -10,15 +10,13 @@ import Loader from '../components/Loader';
 const Chat = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { contacts, messages, contactsLoading, messagesLoading } = useSelector((state) => state.chat);
+  const { contacts, messages, onlineUsers: onlineUserIds, contactsLoading, messagesLoading } = useSelector((state) => state.chat);
 
   const [selectedContact, setSelectedContact] = useState(null);
   const [typedMessage, setTypedMessage] = useState('');
-  const [onlineUserIds, setOnlineUserIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
 
-  const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
@@ -36,51 +34,39 @@ const Chat = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  // Socket.io Connection & Listeners
+  // Socket.io Listeners for chat-specific events
   useEffect(() => {
     if (!user?.id) return;
 
-    // Detect server url based on environment
-    const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-      ? 'http://localhost:8080' 
-      : window.location.origin;
-
-    const socket = io(socketUrl);
-    socketRef.current = socket;
-
-    // Register current user
-    socket.emit('register_user', user.id);
-
-    // Listen for online users update
-    socket.on('get_online_users', (userIds) => {
-      setOnlineUserIds(userIds);
-    });
-
     // Listen for incoming messages
-    socket.on('receive_message', (message) => {
-      // If the incoming message is from the active selected contact, add to list
+    const handleReceiveMessage = (message) => {
       if (selectedContact && (message.sender === selectedContact._id || message.receiver === selectedContact._id)) {
         dispatch(addMessage(message));
       }
-      // Refresh contacts list to update last messages
       dispatch(fetchContacts());
-    });
+    };
 
     // Listen for message sent confirmation
-    socket.on('message_sent', (message) => {
+    const handleMessageSent = (message) => {
       dispatch(addMessage(message));
       dispatch(fetchContacts());
-    });
+    };
 
     // Listen for typing statuses
-    socket.on('typing_status', (data) => {
+    const handleTypingStatus = (data) => {
       if (selectedContact && data.sender === selectedContact._id) {
         setIsOtherUserTyping(data.isTyping);
       }
-    });
+    };
+
+    socket.on('receive_message', handleReceiveMessage);
+    socket.on('message_sent', handleMessageSent);
+    socket.on('typing_status', handleTypingStatus);
 
     return () => {
-      socket.disconnect();
+      socket.off('receive_message', handleReceiveMessage);
+      socket.off('message_sent', handleMessageSent);
+      socket.off('typing_status', handleTypingStatus);
     };
   }, [user?.id, selectedContact?._id, dispatch]);
 
@@ -96,10 +82,10 @@ const Chat = () => {
   const handleInputChange = (e) => {
     setTypedMessage(e.target.value);
 
-    if (!socketRef.current || !selectedContact) return;
+    if (!socket.connected || !selectedContact) return;
 
     // Send typing status
-    socketRef.current.emit('typing', {
+    socket.emit('typing', {
       sender: user.id,
       receiver: selectedContact._id,
     });
@@ -107,7 +93,7 @@ const Chat = () => {
     // Debounce stop_typing status
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     typingTimeoutRef.current = setTimeout(() => {
-      socketRef.current.emit('stop_typing', {
+      socket.emit('stop_typing', {
         sender: user.id,
         receiver: selectedContact._id,
       });
@@ -117,10 +103,10 @@ const Chat = () => {
   // Handle Send Message
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!typedMessage.trim() || !selectedContact || !socketRef.current) return;
+    if (!typedMessage.trim() || !selectedContact || !socket.connected) return;
 
     // Emit send_message socket event
-    socketRef.current.emit('send_message', {
+    socket.emit('send_message', {
       sender: user.id,
       receiver: selectedContact._id,
       message: typedMessage.trim(),
@@ -128,7 +114,7 @@ const Chat = () => {
 
     // Clear typing timeout and stop typing instantly
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-    socketRef.current.emit('stop_typing', {
+    socket.emit('stop_typing', {
       sender: user.id,
       receiver: selectedContact._id,
     });
@@ -214,7 +200,10 @@ const Chat = () => {
                         {/* Name & last message details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <h3 className={`font-semibold truncate text-sm ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-bold' : ''}`}>{contact.name}</h3>
+                            <h3 className={`font-semibold truncate text-sm ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-bold' : ''}`}>
+                              {contact.name}
+                              {isOnline && <span className="ml-2 text-[10px] text-green-400 font-normal">● Online</span>}
+                            </h3>
                             {contact.lastMessage && (
                               <span className={`text-[10px] ${contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-fuchsia-400 font-bold' : 'text-gray-500'}`}>
                                 {new Date(contact.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -276,8 +265,8 @@ const Chat = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-sm leading-tight">{selectedContact.name}</h3>
-                        <p className="text-[10px] text-gray-400">
-                          {onlineUserIds.includes(selectedContact._id) ? 'Online' : 'Offline'}
+                        <p className={`text-[10px] ${onlineUserIds.includes(selectedContact._id) ? 'text-green-400 font-medium' : 'text-gray-400'}`}>
+                          {onlineUserIds.includes(selectedContact._id) ? '● Online' : 'Offline'}
                         </p>
                       </div>
                     </div>
