@@ -5,7 +5,11 @@ const socketUrl = window.location.hostname === 'localhost' || window.location.ho
   : window.location.origin;
 
 const socket = io(socketUrl, {
-  autoConnect: false // We will manually connect when user logs in
+  autoConnect: false,
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
 });
 
 export default socket;
