@@ -16,7 +16,9 @@ import adminRoutes from "./routes/adminRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import savedPostsRoutes from "./routes/savedPostRoutes.js"
 import chatRoutes from "./routes/chatRoutes.js"
+import notificationRoutes from "./routes/notificationRoutes.js"
 import Message from "./models/messageModel.js"
+import Notification from "./models/notificationModel.js"
 
 dotenv.config()
 
@@ -54,9 +56,22 @@ io.on("connection", (socket) => {
             })
             await newMessage.save()
 
+            // Create Notification
+            const notification = new Notification({
+                type: 'message',
+                sender,
+                receiver,
+                isRead: false
+            })
+            await notification.save()
+
+            const populatedNotification = await Notification.findById(notification._id)
+                .populate('sender', 'name avatar')
+
             const receiverSocketId = onlineUsers.get(receiver)
             if (receiverSocketId) {
                 io.to(receiverSocketId).emit("receive_message", newMessage)
+                io.to(receiverSocketId).emit("new_notification", populatedNotification)
             }
             
             socket.emit("message_sent", newMessage)
@@ -132,6 +147,9 @@ app.use("/api/saved-posts", savedPostsRoutes)
 
 // Chat Routes
 app.use("/api/chat", chatRoutes)
+
+// Notification Routes
+app.use("/api/notifications", notificationRoutes)
 
 // API 404 Handler - Catch-all for undefined API routes
 app.use("/api/*path", (req, res) => {

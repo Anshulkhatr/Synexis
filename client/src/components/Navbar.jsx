@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sparkles, Bell, BellOff, CheckCheck, Image, AlertTriangle } from 'lucide-react';
 import UserAvatar from './UserAvatar';
 import { useSelector, useDispatch } from 'react-redux';
-import { markAllRead, clearNotifications } from '../features/notifications/notificationSlice';
+import { markAllNotificationsRead as markAllRead, clearNotifications } from '../features/notifications/notificationSlice';
 
 // Helper: relative time string
 const timeAgo = (isoString) => {
@@ -24,7 +24,7 @@ const Navbar = () => {
  const notifRef = useRef(null);
  const location = useLocation();
 
- const unreadCount = notifications.filter(n => !n.read).length
+ const unreadCount = notifications.filter(n => !n.isRead).length
 
  // Close dropdown when clicking outside
  useEffect(() => {
@@ -118,7 +118,7 @@ const Navbar = () => {
  </div>
  ) : (
  notifications.map(notif => (
- <div key={notif.id} className={`flex items-start gap-3 px-4 py-3.5 hover:bg-white/5 ${!notif.read ? 'bg-fuchsia-500/5' : ''}`}>
+ <div key={notif._id || notif.id} className={`flex items-start gap-3 px-4 py-3.5 hover:bg-white/5 ${!notif.isRead ? 'bg-fuchsia-500/5' : ''}`}>
  {/* Thumbnail or icon */}
  {notif.type === 'post_generating' ? (
  <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
@@ -147,7 +147,7 @@ const Navbar = () => {
  )}
  <p className="text-xs text-fuchsia-400/70 mt-1">{timeAgo(notif.time)}</p>
  </div>
- {!notif.read && (
+ {!notif.isRead && (
  <span className="w-2 h-2 bg-fuchsia-500 rounded-full shrink-0 mt-1.5" />
  )}
  </div>

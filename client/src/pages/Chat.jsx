@@ -38,7 +38,7 @@ const Chat = () => {
 
   // Socket.io Connection & Listeners
   useEffect(() => {
-    if (!user?._id) return;
+    if (!user?.id) return;
 
     // Detect server url based on environment
     const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
@@ -49,7 +49,7 @@ const Chat = () => {
     socketRef.current = socket;
 
     // Register current user
-    socket.emit('register_user', user._id);
+    socket.emit('register_user', user.id);
 
     // Listen for online users update
     socket.on('get_online_users', (userIds) => {
@@ -82,7 +82,7 @@ const Chat = () => {
     return () => {
       socket.disconnect();
     };
-  }, [user?._id, selectedContact?._id, dispatch]);
+  }, [user?.id, selectedContact?._id, dispatch]);
 
   // Fetch messages when selected contact changes
   useEffect(() => {
@@ -100,7 +100,7 @@ const Chat = () => {
 
     // Send typing status
     socketRef.current.emit('typing', {
-      sender: user._id,
+      sender: user.id,
       receiver: selectedContact._id,
     });
 
@@ -108,7 +108,7 @@ const Chat = () => {
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     typingTimeoutRef.current = setTimeout(() => {
       socketRef.current.emit('stop_typing', {
-        sender: user._id,
+        sender: user.id,
         receiver: selectedContact._id,
       });
     }, 2000);
@@ -121,7 +121,7 @@ const Chat = () => {
 
     // Emit send_message socket event
     socketRef.current.emit('send_message', {
-      sender: user._id,
+      sender: user.id,
       receiver: selectedContact._id,
       message: typedMessage.trim(),
     });
@@ -129,7 +129,7 @@ const Chat = () => {
     // Clear typing timeout and stop typing instantly
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     socketRef.current.emit('stop_typing', {
-      sender: user._id,
+      sender: user.id,
       receiver: selectedContact._id,
     });
 
@@ -214,16 +214,16 @@ const Chat = () => {
                         {/* Name & last message details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <h3 className="font-semibold truncate text-sm">{contact.name}</h3>
+                            <h3 className={`font-semibold truncate text-sm ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-bold' : ''}`}>{contact.name}</h3>
                             {contact.lastMessage && (
-                              <span className="text-[10px] text-gray-500">
+                              <span className={`text-[10px] ${contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-fuchsia-400 font-bold' : 'text-gray-500'}`}>
                                 {new Date(contact.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-400 truncate">
+                          <p className={`text-xs truncate ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-medium' : 'text-gray-400'}`}>
                             {contact.lastMessage ? (
-                              contact.lastMessage.sender === user._id ? (
+                              contact.lastMessage.sender === user.id ? (
                                 `You: ${contact.lastMessage.message}`
                               ) : (
                                 contact.lastMessage.message
@@ -233,6 +233,9 @@ const Chat = () => {
                             )}
                           </p>
                         </div>
+                        {contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead && (
+                          <div className="w-2.5 h-2.5 bg-fuchsia-500 rounded-full ml-2 shrink-0"></div>
+                        )}
                       </button>
                     );
                   })
@@ -288,7 +291,7 @@ const Chat = () => {
                       </div>
                     ) : messages.length > 0 ? (
                       messages.map((message) => {
-                        const isOwn = message.sender === user._id;
+                        const isOwn = message.sender === user.id;
                         return (
                           <div
                             key={message._id}

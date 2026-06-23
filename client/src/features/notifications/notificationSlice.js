@@ -1,55 +1,83 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import notificationService from './notificationService';
 
-// Load existing notifications from localStorage for persistence across refreshes
-const loadFromStorage = () => {
-    try {
-        const stored = localStorage.getItem('synexis_notifications')
-        return stored ? JSON.parse(stored) : []
-    } catch {
-        return []
+export const fetchNotifications = createAsyncThunk(
+    'notifications/fetch',
+    async (_, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token;
+            return await notificationService.getNotifications(token);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message);
+        }
     }
-}
+);
 
-const saveToStorage = (notifications) => {
-    try {
-        localStorage.setItem('synexis_notifications', JSON.stringify(notifications))
-    } catch {}
-}
+export const markNotificationRead = createAsyncThunk(
+    'notifications/markRead',
+    async (id, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token;
+            return await notificationService.markAsRead(id, token);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message);
+        }
+    }
+);
+
+export const markAllNotificationsRead = createAsyncThunk(
+    'notifications/markAllRead',
+    async (_, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token;
+            return await notificationService.markAllRead(token);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message);
+        }
+    }
+);
 
 const notificationSlice = createSlice({
     name: 'notifications',
     initialState: {
-        items: loadFromStorage(),
+        items: [],
+        isLoading: false,
+        isError: false,
+        message: ''
     },
     reducers: {
         addNotification: (state, action) => {
-            const id = action.payload.id || Date.now().toString();
-            const notif = {
-                ...action.payload,
-                id,
-                time: new Date().toISOString(),
-                read: false,
-            }
-            const existingIndex = state.items.findIndex(n => n.id === id);
-            if (existingIndex !== -1) {
-                state.items[existingIndex] = { ...state.items[existingIndex], ...notif };
-            } else {
-                state.items.unshift(notif) // newest first
-            }
-            // Keep max 20 notifications
-            if (state.items.length > 20) state.items = state.items.slice(0, 20)
-            saveToStorage(state.items)
-        },
-        markAllRead: (state) => {
-            state.items = state.items.map(n => ({ ...n, read: true }))
-            saveToStorage(state.items)
+            state.items.unshift(action.payload);
         },
         clearNotifications: (state) => {
-            state.items = []
-            saveToStorage([])
+            state.items = [];
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchNotifications.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchNotifications.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.items = action.payload;
+            })
+            .addCase(fetchNotifications.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(markNotificationRead.fulfilled, (state, action) => {
+                const index = state.items.findIndex(n => n._id === action.payload._id);
+                if (index !== -1) {
+                    state.items[index].isRead = true;
+                }
+            })
+            .addCase(markAllNotificationsRead.fulfilled, (state) => {
+                state.items.forEach(n => { n.isRead = true; });
+            });
     }
-})
+});
 
-export const { addNotification, markAllRead, clearNotifications } = notificationSlice.actions
-export default notificationSlice.reducer
+export const { addNotification, clearNotifications } = notificationSlice.actions;
+export default notificationSlice.reducer;

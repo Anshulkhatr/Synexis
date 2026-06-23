@@ -32,15 +32,24 @@ const getContacts = async (req, res) => {
                 ]
             }).sort({ createdAt: -1 });
 
+            const contactObj = typeof contact.toObject === 'function' ? contact.toObject() : contact;
+
             return {
-                ...contact.toObject(),
+                ...contactObj,
                 lastMessage: lastMessage ? {
                     message: lastMessage.message,
                     sender: lastMessage.sender,
-                    createdAt: lastMessage.createdAt
+                    createdAt: lastMessage.createdAt,
+                    isRead: lastMessage.isRead
                 } : null
             };
         }));
+
+        contactsWithLastMessage.sort((a, b) => {
+            const dateA = a.lastMessage ? new Date(a.lastMessage.createdAt).getTime() : 0;
+            const dateB = b.lastMessage ? new Date(b.lastMessage.createdAt).getTime() : 0;
+            return dateB - dateA;
+        });
 
         res.status(200).json(contactsWithLastMessage);
     } catch (error) {
