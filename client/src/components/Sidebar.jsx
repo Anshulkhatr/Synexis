@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, PlusSquare, User, Sparkles, Settings, LogOut, LayoutDashboard, MessageSquare, Bell, X, Sun, Moon } from 'lucide-react';
+import { Home, Compass, PlusSquare, User, Sparkles, Settings, LogOut, LayoutDashboard, MessageSquare, Bell, X, Sun, Moon, BarChart3 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '../context/ThemeContext';
 import { logoutUser } from '../features/auth/authSlice';
@@ -34,6 +34,7 @@ const Sidebar = () => {
    { icon: PlusSquare, label: 'Generate', path: '/auth/generate' },
    { icon: MessageSquare, label: 'Messages', path: '/auth/chat' },
    { icon: User, label: 'Profile', path: `/auth/profile/${user?.name}` },
+   { icon: BarChart3, label: 'Analytics', path: '/auth/analytics' },
  ];
 
 

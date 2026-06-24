@@ -108,6 +108,7 @@ const profileSlice = createSlice({
                 if (state.profile) {
                     state.profile.name = action.payload.name
                     state.profile.bio = action.payload.bio
+                    state.profile.themeColor = action.payload.themeColor
                 }
                 state.profileError = false
             })

@@ -21,9 +21,14 @@ const Feed = () => {
  const dispatch = useDispatch()
  const navigate = useNavigate()
 
- const filteredPosts = posts?.filter(post =>
- profile?.following?.some(follow => follow._id === post.user._id)
- ).filter(post => post.isPublished)
+ const [feedType, setFeedType] = React.useState('following'); // 'following' | 'global'
+
+ // Sort all posts chronologically
+ const sortedPosts = [...(posts || [])].filter(post => post.isPublished).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+ const filteredPosts = feedType === 'following' 
+ ? sortedPosts.filter(post => profile?.following?.some(follow => follow._id === post.user._id))
+ : sortedPosts;
 
 
 
@@ -69,8 +74,17 @@ const Feed = () => {
  <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto mt-4">
  <div className="mb-8 flex items-center justify-between">
  <h1 className="text-3xl font-syne font-bold">Your Feed</h1>
- <div className="flex gap-2">
- <button className="px-4 py-2 rounded-full bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm">
+ <div className="flex bg-gray-100 dark:bg-black/40 p-1 rounded-xl border border-gray-200 dark:border-white/10">
+ <button 
+ onClick={() => setFeedType('global')}
+ className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${feedType === 'global' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+ >
+ Global
+ </button>
+ <button 
+ onClick={() => setFeedType('following')}
+ className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${feedType === 'following' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+ >
  Following
  </button>
  </div>
@@ -86,7 +100,10 @@ const Feed = () => {
  <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
  <Sparkles className="w-12 h-12 text-fuchsia-500 opacity-40" />
  <h2 className="text-xl font-semibold text-gray-900 dark:text-white/60">Your feed is empty</h2>
- <p className="text-sm text-gray-500 max-w-xs">Follow other creators on <span className="text-fuchsia-400 font-medium">Explore</span> to see their AI art here.</p>
+ <p className="text-sm text-gray-500 max-w-xs">
+ {feedType === 'following' ? 'Follow other creators on ' : 'No posts found on '}
+ <span className="text-fuchsia-400 font-medium">Explore</span> to see their AI art here.
+ </p>
  </div>
  )}
  </div>

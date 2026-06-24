@@ -8,6 +8,7 @@ import Explore from './pages/Explore';
 import Generate from './pages/Generate';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import Analytics from './pages/Analytics';
 import PostDetail from './pages/PostDetail';
 import Chat from './pages/Chat';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -41,6 +42,7 @@ const App = () => {
  <Route path='generate' element={<Generate />} />
  <Route path='profile/:username' element={<Profile />} />
  <Route path='settings' element={<Settings />} />
+ <Route path='analytics' element={<Analytics />} />
  <Route path='chat' element={<Chat />} />
  </Route>
 

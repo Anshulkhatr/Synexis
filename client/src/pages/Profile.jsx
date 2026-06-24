@@ -119,8 +119,8 @@ const Profile = () => {
  <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
  <div className="w-full relative pb-20">
  {/* Cover Image */}
- <div className="h-64 sm:h-80 w-full relative overflow-hidden bg-gray-50 dark:bg-[#0a0a0f]">
- <div className="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-fuchsia-900/20 to-[#0a0a0f]"></div>
+ <div className="h-64 sm:h-80 w-full relative overflow-hidden bg-gray-50 dark:bg-[#0a0a0f]" style={{ backgroundColor: profile?.themeColor ? `${profile.themeColor}20` : undefined }}>
+ <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-[#0a0a0f]" style={{ background: `radial-gradient(circle at top right, ${profile?.themeColor || '#8b5cf6'}60, transparent 60%)` }}></div>
  {/* Overlay for depth and contrast */}
  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80"></div>
  <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent"></div>
@@ -168,7 +168,11 @@ const Profile = () => {
  <Share2 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
  </button>
  {profile?._id !== (user?.id || user?._id) && (
- <button onClick={() => handleFollowUnfollow(profile._id)} className={alreadyFollowed ? "px-5 py-2 rounded-full text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm bg-violet-500" : "px-5 py-2 rounded-full bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm"}>
+ <button 
+ onClick={() => handleFollowUnfollow(profile._id)} 
+ className={`px-5 py-2 rounded-full font-medium hover:opacity-80 text-sm transition-colors ${alreadyFollowed ? 'text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'}`}
+ style={alreadyFollowed ? { backgroundColor: profile?.themeColor || '#8b5cf6' } : {}}
+ >
  {alreadyFollowed ? "Unfollow" : "Follow"}
  </button>
  )}
@@ -204,20 +208,23 @@ const Profile = () => {
  <div className="flex gap-8 mb-8 border-b border-gray-200 dark:border-white/10">
  <button 
  onClick={() => setActiveTab('creations')}
- className={`pb-4 font-medium relative ${activeTab === 'creations' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'creations' ? 'border-b-2' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ style={activeTab === 'creations' ? { color: profile?.themeColor || '#8b5cf6', borderColor: profile?.themeColor || '#8b5cf6' } : {}}
  >
  Creations
  </button>
  <button 
  onClick={() => setActiveTab('liked')}
- className={`pb-4 font-medium relative ${activeTab === 'liked' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'liked' ? 'border-b-2' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ style={activeTab === 'liked' ? { color: profile?.themeColor || '#8b5cf6', borderColor: profile?.themeColor || '#8b5cf6' } : {}}
  >
  Liked
  </button>
  {profile?._id === (user?.id || user?._id) && (
  <button 
  onClick={() => setActiveTab('collections')}
- className={`pb-4 font-medium relative ${activeTab === 'collections' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'collections' ? 'border-b-2' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
+ style={activeTab === 'collections' ? { color: profile?.themeColor || '#8b5cf6', borderColor: profile?.themeColor || '#8b5cf6' } : {}}
  >
  Collections
  </button>

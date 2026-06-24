@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please Enter Your Bio"],
     },
+    themeColor: {
+        type: String,
+        default: '#8b5cf6', // Default to violet-500
+    },
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,

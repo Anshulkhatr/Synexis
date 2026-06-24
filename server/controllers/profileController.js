@@ -125,7 +125,7 @@ const updateAvatar = async (req, res) => {
 
 
 const updateDetails = async (req, res) => {
-    const { name, bio } = req.body;
+    const { name, bio, themeColor } = req.body;
     
     try {
         const user = await User.findById(req.user.id);
@@ -136,6 +136,7 @@ const updateDetails = async (req, res) => {
 
         user.name = name || user.name;
         user.bio = bio !== undefined ? bio : user.bio;
+        user.themeColor = themeColor || user.themeColor;
         
         await user.save();
         
@@ -145,6 +146,7 @@ const updateDetails = async (req, res) => {
             email: user.email,
             avatar: user.avatar,
             bio: user.bio,
+            themeColor: user.themeColor,
             credits: user.credits,
             isAdmin: user.isAdmin,
             isActive: user.isActive,

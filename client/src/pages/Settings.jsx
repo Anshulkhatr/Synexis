@@ -13,14 +13,24 @@ const Settings = () => {
 
     const [formData, setFormData] = useState({
         name: user?.name || profile?.name || '',
-        bio: profile?.bio || ''
+        bio: profile?.bio || '',
+        themeColor: profile?.themeColor || '#8b5cf6'
     });
+
+    const PRESET_COLORS = [
+        { name: 'Violet', value: '#8b5cf6' },
+        { name: 'Fuchsia', value: '#d946ef' },
+        { name: 'Blue', value: '#3b82f6' },
+        { name: 'Emerald', value: '#10b981' },
+        { name: 'Rose', value: '#f43f5e' }
+    ];
 
     useEffect(() => {
         if (profile) {
             setFormData({
                 name: profile.name,
-                bio: profile.bio
+                bio: profile.bio,
+                themeColor: profile.themeColor || '#8b5cf6'
             });
         }
     }, [profile]);
@@ -74,6 +84,22 @@ const Settings = () => {
                                         className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50"
                                         placeholder="Tell the community about yourself..."
                                     ></textarea>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Profile Accent Color</label>
+                                    <div className="flex gap-4">
+                                        {PRESET_COLORS.map(color => (
+                                            <button
+                                                key={color.value}
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, themeColor: color.value })}
+                                                className={`w-10 h-10 rounded-full transition-transform ${formData.themeColor === color.value ? 'scale-125 ring-2 ring-offset-2 ring-gray-900 dark:ring-white dark:ring-offset-gray-900' : 'hover:scale-110'}`}
+                                                style={{ backgroundColor: color.value }}
+                                                title={color.name}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
 
                                 <button 

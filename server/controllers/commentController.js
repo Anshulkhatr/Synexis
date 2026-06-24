@@ -22,9 +22,9 @@ const addComment = async (req, res) => {
     const postId = req.params.pid
     const userId = req.user._id
 
-    const Post = await Post.findById(postId)
+    const post = await Post.findById(postId)
 
-    if (!Post) {
+    if (!post) {
         res.status(404)
         throw new Error("Post Not Found")
     }
