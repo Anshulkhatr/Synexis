@@ -58,25 +58,25 @@ const Login = () => {
  }
 
  return (
- <div className="h-full w-full bg-[#0a0a0f] overflow-y-auto relative flex flex-col items-center py-20 px-4">
+ <div className="h-full w-full bg-gray-50 dark:bg-[#0a0a0f] overflow-y-auto relative flex flex-col items-center py-20 px-4">
  {/* Background elements */}
  <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[100px]"></div>
  <div className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[100px]"></div>
 
- <div className="glass-card border border-white/10 p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10 shadow-2xl shadow-black my-auto">
+ <div className="glass-card border border-gray-200 dark:border-white/10 p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10 shadow-2xl shadow-black my-auto">
  <div className="flex justify-center mb-8">
  <Link to="/" className="flex items-center gap-2 group">
  <Sparkles className="text-violet-500 w-8 h-8 group-hover:" />
- <span className="font-syne font-bold text-2xl text-white tracking-wide">Synexis</span>
+ <span className="font-syne font-bold text-2xl text-gray-900 dark:text-white tracking-wide">Synexis</span>
  </Link>
  </div>
 
- <h2 className="text-2xl text-white font-bold text-center mb-2">Welcome back</h2>
- <p className="text-gray-400 text-center mb-8 text-sm">Please enter your details to sign in.</p>
+ <h2 className="text-2xl text-gray-900 dark:text-white font-bold text-center mb-2">Welcome back</h2>
+ <p className="text-gray-600 dark:text-gray-400 text-center mb-8 text-sm">Please enter your details to sign in.</p>
 
  <form onSubmit={handleLogin} className="flex flex-col gap-5">
  <div>
- <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+ <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
  <input
  name='email'
  value={email}
@@ -84,13 +84,13 @@ const Login = () => {
  type="email"
  required
  placeholder="Enter your email"
- className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 "
+ className="w-full bg-white dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 "
  />
  </div>
 
  <div>
  <div className="flex justify-between items-center mb-2">
- <label className="block text-sm font-medium text-gray-300">Password</label>
+ <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
  <a href="#" className="text-xs text-violet-400 hover:text-violet-300 ">Forgot password?</a>
  </div>
  <input
@@ -100,19 +100,19 @@ const Login = () => {
  type="password"
  required
  placeholder="••••••••"
- className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 "
+ className="w-full bg-white dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 "
  />
  </div>
 
  <button
  type="submit"
- className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold py-3 rounded-xl mt-4 ] ] shadow-lg shadow-violet-600/25"
+ className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-gray-900 dark:text-white font-bold py-3 rounded-xl mt-4 ] ] shadow-lg shadow-violet-600/25"
  >
  Sign In
  </button>
  </form>
 
- <p className="text-center text-gray-400 text-sm mt-8">
+ <p className="text-center text-gray-600 dark:text-gray-400 text-sm mt-8">
  Don't have an account? <Link to="/register" className="text-violet-400 hover:text-violet-300 font-medium">Sign up</Link>
  </p>
  </div>

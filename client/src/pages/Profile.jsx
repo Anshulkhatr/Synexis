@@ -119,7 +119,7 @@ const Profile = () => {
  <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
  <div className="w-full relative pb-20">
  {/* Cover Image */}
- <div className="h-64 sm:h-80 w-full relative overflow-hidden bg-[#0a0a0f]">
+ <div className="h-64 sm:h-80 w-full relative overflow-hidden bg-gray-50 dark:bg-[#0a0a0f]">
  <div className="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-fuchsia-900/20 to-[#0a0a0f]"></div>
  {/* Overlay for depth and contrast */}
  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80"></div>
@@ -133,7 +133,7 @@ const Profile = () => {
  <div className="relative">
  <UserAvatar src={profile?.avatar} alt={profile?.name} size="xl" ring />
  {profileLoading && (
- <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full z-20">
+ <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-black/60 rounded-full z-20">
  <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full"></div>
  </div>
  )}
@@ -142,10 +142,10 @@ const Profile = () => {
  <>
  <button 
  onClick={handleAvatarClick}
- className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 cursor-pointer border-2 border-dashed border-white/30"
+ className="absolute inset-0 flex items-center justify-center bg-white dark:bg-black/40 rounded-full opacity-0 group-hover:opacity-100 cursor-pointer border-2 border-dashed border-white/30"
  title="Change Avatar"
  >
- <Camera className="w-8 h-8 text-white" />
+ <Camera className="w-8 h-8 text-gray-900 dark:text-white" />
  </button>
  <input 
  type="file" 
@@ -158,17 +158,17 @@ const Profile = () => {
  )}
  </div>
  <div className="mb-2">
- <h1 className="text-3xl font-syne font-bold text-white">{profile?.name}</h1>
- <p className="text-gray-400">@{username}</p>
+ <h1 className="text-3xl font-syne font-bold text-gray-900 dark:text-white">{profile?.name}</h1>
+ <p className="text-gray-600 dark:text-gray-400">@{username}</p>
  </div>
  </div>
 
  <div className="flex gap-3 relative z-10 sm:mb-2">
- <button onClick={handleShare} className="p-2 rounded-full glass-card hover:bg-white/10">
- <Share2 className="w-5 h-5 text-gray-300" />
+ <button onClick={handleShare} className="p-2 rounded-full glass-card hover:bg-gray-200 dark:bg-white/10">
+ <Share2 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
  </button>
  {profile?._id !== (user?.id || user?._id) && (
- <button onClick={() => handleFollowUnfollow(profile._id)} className={alreadyFollowed ? "px-5 py-2 rounded-full text-white font-medium hover:bg-white/20 text-sm bg-violet-500" : "px-5 py-2 rounded-full bg-white/10 text-white font-medium hover:bg-white/20 text-sm"}>
+ <button onClick={() => handleFollowUnfollow(profile._id)} className={alreadyFollowed ? "px-5 py-2 rounded-full text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm bg-violet-500" : "px-5 py-2 rounded-full bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm"}>
  {alreadyFollowed ? "Unfollow" : "Follow"}
  </button>
  )}
@@ -176,48 +176,48 @@ const Profile = () => {
  </div>
 
  {/* Bio & Stats */}
- <div className="max-w-2xl text-gray-300 mb-8 space-y-4">
+ <div className="max-w-2xl text-gray-700 dark:text-gray-300 mb-8 space-y-4">
  <p className="leading-relaxed">{profile?.bio}</p>
 
- <div className="flex gap-6 text-sm text-gray-400">
+ <div className="flex gap-6 text-sm text-gray-600 dark:text-gray-400">
  <div className="flex items-center gap-1.5"><CircleDollarSign className="w-4 h-4" /> Credits : {profile?.credits}</div>
  <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Joined {new Date(profile?.createdAt).toLocaleDateString('en-IN')}</div>
  </div>
 
- <div className="flex gap-8 pt-4 border-t border-white/10">
+ <div className="flex gap-8 pt-4 border-t border-gray-200 dark:border-white/10">
  <div className="flex flex-col text-center">
- <span className="text-xl font-bold text-white">{profile?.posts?.length || 0}</span>
+ <span className="text-xl font-bold text-gray-900 dark:text-white">{profile?.posts?.length || 0}</span>
  <span className="text-sm font-medium text-gray-500 uppercase tracking-wider">Posts</span>
  </div>
  <div className="flex flex-col text-center">
- <span className="text-xl font-bold text-white">{profile?.followers?.length || 0}</span>
+ <span className="text-xl font-bold text-gray-900 dark:text-white">{profile?.followers?.length || 0}</span>
  <span className="text-sm font-medium text-gray-500 uppercase tracking-wider">Followers</span>
  </div>
  <div className="flex flex-col text-center">
- <span className="text-xl font-bold text-white">{profile?.following?.length || 0}</span>
+ <span className="text-xl font-bold text-gray-900 dark:text-white">{profile?.following?.length || 0}</span>
  <span className="text-sm font-medium text-gray-500 uppercase tracking-wider">Following</span>
  </div>
  </div>
  </div>
 
  {/* Tabs */}
- <div className="flex gap-8 mb-8 border-b border-white/10">
+ <div className="flex gap-8 mb-8 border-b border-gray-200 dark:border-white/10">
  <button 
  onClick={() => setActiveTab('creations')}
- className={`pb-4 font-medium relative ${activeTab === 'creations' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-400 hover:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'creations' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
  >
  Creations
  </button>
  <button 
  onClick={() => setActiveTab('liked')}
- className={`pb-4 font-medium relative ${activeTab === 'liked' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-400 hover:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'liked' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
  >
  Liked
  </button>
  {profile?._id === (user?.id || user?._id) && (
  <button 
  onClick={() => setActiveTab('collections')}
- className={`pb-4 font-medium relative ${activeTab === 'collections' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-400 hover:text-white'}`}
+ className={`pb-4 font-medium relative ${activeTab === 'collections' ? 'text-violet-500 border-b-2 border-violet-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'}`}
  >
  Collections
  </button>

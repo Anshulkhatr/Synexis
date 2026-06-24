@@ -18,7 +18,7 @@ const UserAvatar = ({ src, alt, size = 'md', isOnline = false, ring = false }) =
 
  return (
  <div className={`relative inline-block ${sizeClasses[size]}`}>
- <div className={`w-full h-full rounded-full overflow-hidden ${ring ? 'ring-2 ring-violet-500/50' : 'border border-white/10'} bg-gray-900 flex items-center justify-center`}>
+ <div className={`w-full h-full rounded-full overflow-hidden ${ring ? 'ring-2 ring-violet-500/50' : 'border border-gray-200 dark:border-white/10'} bg-gray-900 flex items-center justify-center`}>
  <img 
  src={avatarUrl} 
  alt={alt} 

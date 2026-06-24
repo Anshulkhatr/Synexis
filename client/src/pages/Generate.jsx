@@ -83,26 +83,26 @@ const Generate = () => {
  <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/10 rounded-full blur-3xl rounded-tl-none translate-x-1/2 -translate-y-1/2"></div>
 
  <div className="relative z-10">
- <label className="block text-sm font-medium text-gray-300 mb-2">Your Prompt</label>
+ <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Prompt</label>
  <textarea
  rows="4"
  placeholder="Describe what you want to see... e.g., 'A cyberpunk city in the rain, neon lights, highly detailed'"
  value={prompt}
  onChange={(e) => setPrompt(e.target.value)}
- className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 resize-none "
+ className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-2xl p-4 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 resize-none "
  />
  </div>
 
  <div className="relative z-10">
- <label className="block text-sm font-medium text-gray-300 mb-3">Art Style</label>
+ <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Art Style</label>
  <div className="flex flex-wrap gap-2">
  {STYLES.map(style => (
  <button
  key={style}
  onClick={() => setActiveStyle(style)}
  className={`px-4 py-1.5 rounded-full text-sm font-medium ${activeStyle === style
- ? 'bg-violet-600 text-white border border-violet-500'
- : 'bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10'
+ ? 'bg-violet-600 text-gray-900 dark:text-white border border-violet-500'
+ : 'bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:bg-white/10'
  }`}
  >
  {style}
@@ -112,15 +112,15 @@ const Generate = () => {
  </div>
 
  <div className="relative z-10">
- <label className="block text-sm font-medium text-gray-300 mb-3">Aspect Ratio</label>
+ <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Aspect Ratio</label>
  <div className="grid grid-cols-3 gap-3">
  {RATIOS.map(ratio => (
  <button
  key={ratio.label}
  onClick={() => setActiveRatio(ratio.value)}
  className={`py-3 rounded-xl flex flex-col items-center justify-center gap-2 ${activeRatio === ratio.value
- ? 'bg-fuchsia-600/20 text-white border border-fuchsia-500/50 ring-1 ring-fuchsia-500/50'
- : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10 hover:text-gray-200'
+ ? 'bg-fuchsia-600/20 text-gray-900 dark:text-white border border-fuchsia-500/50 ring-1 ring-fuchsia-500/50'
+ : 'bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:bg-white/10 hover:text-gray-200'
  }`}
  >
  <div className={`border-2 border-current rounded-sm ${ratio.value === '1:1' ? 'w-6 h-6' : ratio.value === '16:9' ? 'w-8 h-5' : 'w-5 h-8'
@@ -135,8 +135,8 @@ const Generate = () => {
  onClick={handleGenerate}
  disabled={!prompt || isGenerating}
  className={`mt-auto w-full py-4 rounded-xl flex items-center justify-center gap-2 font-bold ${!prompt
- ? 'bg-white/5 text-gray-500 cursor-not-allowed'
- : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/50 ]'
+ ? 'bg-gray-100 dark:bg-white/5 text-gray-500 cursor-not-allowed'
+ : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-gray-900 dark:text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/50 ]'
  }`}
  >
  {isGenerating ? (

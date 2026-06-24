@@ -55,8 +55,8 @@ const AdminPosts = () => {
  <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-8">
  {/* Header */}
  <div className="flex items-center gap-3">
- <h1 className="font-syne text-3xl font-bold text-white">Posts</h1>
- <span className="bg-white/10 text-white px-3 py-1 rounded-full text-sm font-medium border border-white/10">
+ <h1 className="font-syne text-3xl font-bold text-gray-900 dark:text-white">Posts</h1>
+ <span className="bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm font-medium border border-gray-200 dark:border-white/10">
  {posts.length} total
  </span>
  </div>
@@ -68,8 +68,8 @@ const AdminPosts = () => {
  key={opt}
  onClick={() => setFilter(opt)}
  className={`px-4 py-1.5 rounded-full text-sm font-medium ${filter === opt
- ? 'bg-violet-500 text-white'
- : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+ ? 'bg-violet-500 text-gray-900 dark:text-white'
+ : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:bg-white/10 hover:text-gray-900 dark:text-white'
  }`}
  >
  {opt}
@@ -82,7 +82,7 @@ const AdminPosts = () => {
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse min-w-max">
  <thead>
- <tr className="border-b border-white/10 bg-white/5 text-gray-400 text-sm">
+ <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 text-sm">
  <th className="py-4 px-4 font-medium w-24">Thumbnail</th>
  <th className="py-4 px-4 font-medium max-w-sm">Prompt</th>
  <th className="py-4 px-4 font-medium">Author</th>
@@ -95,7 +95,7 @@ const AdminPosts = () => {
  <tbody>
  {posts.length > 0 ? (
  posts.map((post) => (
- <tr key={post._id} className="border-b border-white/5 hover:bg-white/5 ">
+ <tr key={post._id} className="border-b border-gray-200 dark:border-white/5 hover:bg-gray-100 dark:bg-white/5 ">
  <td className="py-4 px-4">
  {post.imageLink ? (
  <img
@@ -104,34 +104,34 @@ const AdminPosts = () => {
  className="w-16 h-16 object-cover rounded-xl"
  />
  ) : (
- <div className="w-16 h-16 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center">
+ <div className="w-16 h-16 bg-gray-100 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 flex items-center justify-center">
  <ImageIcon className="w-6 h-6 text-gray-500" />
  </div>
  )}
  </td>
  <td className="py-4 px-4 max-w-sm">
- <p className="text-gray-300 text-sm line-clamp-2" title={post.prompt}>
+ <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2" title={post.prompt}>
  {post.prompt}
  </p>
  </td>
  <td className="py-4 px-4">
  <div className="flex items-center gap-2">
  <UserAvatar size="sm" />
- <span className="text-white font-medium text-sm">{post.user?.name}</span>
+ <span className="text-gray-900 dark:text-white font-medium text-sm">{post.user?.name}</span>
  </div>
  </td>
- <td className="py-4 px-4 text-gray-300">{post.likes?.length || 0}</td>
+ <td className="py-4 px-4 text-gray-700 dark:text-gray-300">{post.likes?.length || 0}</td>
  <td className="py-4 px-4">
- <span className={`px-3 py-1 rounded-full text-xs font-medium ${post.isPublished ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+ <span className={`px-3 py-1 rounded-full text-xs font-medium ${post.isPublished ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'}`}>
  {post.isPublished ? 'Published' : 'Unpublished'}
  </span>
  </td>
- <td className="py-4 px-4 text-gray-400 text-sm">
+ <td className="py-4 px-4 text-gray-600 dark:text-gray-400 text-sm">
  {new Date(post.createdAt).toLocaleDateString()}
  </td>
  <td className="py-4 px-4 text-right">
  {post.isPublished ? (
- <button onClick={() => handlePublishUnpublishPost(post._id)} className="border border-gray-500/50 text-gray-300 hover:text-white hover:bg-white/10 px-3 py-1 rounded-full text-xs font-medium ">
+ <button onClick={() => handlePublishUnpublishPost(post._id)} className="border border-gray-500/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-200 dark:bg-white/10 px-3 py-1 rounded-full text-xs font-medium ">
  Unpublish
  </button>
  ) : (

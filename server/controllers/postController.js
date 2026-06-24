@@ -7,6 +7,7 @@ import uploadToCloudinary from "../middleware/cloudinaryMiddleware.js";
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import Report from "../models/reportModel.js";
+import Notification from "../models/notificationModel.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -225,6 +226,31 @@ const likeAndUnlikePost = async (req, res) => {
         // Add Follower in Liked
         post.likes.push(currentUser._id)
         await post.save()
+
+        // Create notification if liking someone else's post
+        if (post.user._id.toString() !== currentUser._id.toString()) {
+            const notification = new Notification({
+                type: 'like',
+                sender: currentUser._id,
+                receiver: post.user._id,
+                post: post._id,
+                isRead: false
+            });
+            await notification.save();
+
+            const populatedNotification = await Notification.findById(notification._id)
+                .populate('sender', 'name avatar');
+
+            const io = req.app.get('io');
+            const onlineUsers = req.app.get('onlineUsers');
+            
+            if (io && onlineUsers) {
+                const receiverSocketId = onlineUsers.get(post.user._id.toString());
+                if (receiverSocketId) {
+                    io.to(receiverSocketId).emit("new_notification", populatedNotification);
+                }
+            }
+        }
     }
 
     // Populate after save using the Post model directly

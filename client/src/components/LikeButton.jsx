@@ -35,7 +35,7 @@ const LikeButton = ({ initialLikes, post }) => {
  onClick={toggleLike}
  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md ${liked
  ? 'bg-violet-500/20 text-violet-500 border border-violet-500/50'
- : 'bg-black/40 text-white hover:bg-black/60 border border-white/10'
+ : 'bg-white dark:bg-black/40 text-gray-900 dark:text-white hover:bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10'
  }`}
  >
  <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />

@@ -10,8 +10,8 @@ const CategoryFilter = ({ activeCategory, onSelect }) => {
  onClick={() => onSelect(cat)}
  className={`snap-center shrink-0 px-5 py-2 rounded-full text-sm font-medium ${
  activeCategory === cat
- ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30 ring-1 ring-violet-400'
- : 'glass-card text-gray-300 hover:bg-white/10 hover:text-white'
+ ? 'bg-violet-600 text-gray-900 dark:text-white shadow-lg shadow-violet-500/30 ring-1 ring-violet-400'
+ : 'glass-card text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:bg-white/10 hover:text-gray-900 dark:text-white'
  }`}
  >
  {cat}

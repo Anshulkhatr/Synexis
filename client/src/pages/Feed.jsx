@@ -70,7 +70,7 @@ const Feed = () => {
  <div className="mb-8 flex items-center justify-between">
  <h1 className="text-3xl font-syne font-bold">Your Feed</h1>
  <div className="flex gap-2">
- <button className="px-4 py-2 rounded-full bg-white/10 text-white font-medium hover:bg-white/20 text-sm">
+ <button className="px-4 py-2 rounded-full bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium hover:bg-gray-300 dark:bg-white/20 text-sm">
  Following
  </button>
  </div>
@@ -85,7 +85,7 @@ const Feed = () => {
  ) : (
  <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
  <Sparkles className="w-12 h-12 text-fuchsia-500 opacity-40" />
- <h2 className="text-xl font-semibold text-white/60">Your feed is empty</h2>
+ <h2 className="text-xl font-semibold text-gray-900 dark:text-white/60">Your feed is empty</h2>
  <p className="text-sm text-gray-500 max-w-xs">Follow other creators on <span className="text-fuchsia-400 font-medium">Explore</span> to see their AI art here.</p>
  </div>
  )}

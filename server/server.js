@@ -17,6 +17,7 @@ import postRoutes from "./routes/postRoutes.js"
 import savedPostsRoutes from "./routes/savedPostRoutes.js"
 import chatRoutes from "./routes/chatRoutes.js"
 import notificationRoutes from "./routes/notificationRoutes.js"
+import commentRoutes from "./routes/commentRoutes.js"
 import Message from "./models/messageModel.js"
 import Notification from "./models/notificationModel.js"
 
@@ -108,6 +109,10 @@ io.on("connection", (socket) => {
     })
 })
 
+// Expose io and onlineUsers to Express app so controllers can access them
+app.set("io", io)
+app.set("onlineUsers", onlineUsers)
+
 // Health Check for Render
 app.get("/health-check", (req, res) => {
     res.status(200).json({ status: "UP", timestamp: new Date() })
@@ -150,6 +155,9 @@ app.use("/api/chat", chatRoutes)
 
 // Notification Routes
 app.use("/api/notifications", notificationRoutes)
+
+// Comment Routes
+app.use("/api/comments", commentRoutes)
 
 // API 404 Handler - Catch-all for undefined API routes
 app.use("/api/*path", (req, res) => {

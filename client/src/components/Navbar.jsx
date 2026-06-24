@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, Bell, BellOff, CheckCheck, Image, AlertTriangle } from 'lucide-react';
+import { Sparkles, Bell, BellOff, CheckCheck, Image, AlertTriangle, Sun, Moon } from 'lucide-react';
 import UserAvatar from './UserAvatar';
+import { useTheme } from '../context/ThemeContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { markAllNotificationsRead as markAllRead, clearNotifications } from '../features/notifications/notificationSlice';
 
@@ -19,6 +20,7 @@ const Navbar = () => {
  const { user } = useSelector(state => state.auth)
  const { items: notifications } = useSelector(state => state.notifications)
  const dispatch = useDispatch()
+ const { theme, toggleTheme } = useTheme();
 
  const [notifOpen, setNotifOpen] = useState(false);
  const notifRef = useRef(null);
@@ -48,7 +50,7 @@ const Navbar = () => {
  if (isExcluded && location.pathname === '/') return null;
 
  return (
- <nav className="sticky top-0 z-40 w-full glass-card border-b border-white/10 bg-[#0a0a0f]/80 px-4 md:px-6 h-16 flex items-center justify-between ">
+ <nav className="sticky top-0 z-40 w-full glass-card border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0a0f]/80 px-4 md:px-6 h-16 flex items-center justify-between ">
 
  {/* Mobile Logo */}
  <div className="flex items-center gap-4 flex-1">
@@ -61,23 +63,32 @@ const Navbar = () => {
  <div className="flex items-center gap-3 md:gap-5">
  <Link
  to="/auth/generate"
- className="hidden md:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 py-2 rounded-full font-medium text-sm shadow-lg shadow-violet-900/20"
+ className="hidden md:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-gray-900 dark:text-white px-4 py-2 rounded-full font-medium text-sm shadow-lg shadow-violet-900/20"
  >
  <Sparkles className="w-4 h-4" />
  <span>Generate</span>
  </Link>
 
+ {/* Theme Toggle */}
+ <button
+ onClick={toggleTheme}
+ className="p-2 rounded-full hover:bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white transition-colors"
+ aria-label="Toggle Theme"
+ >
+ {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+ </button>
+
  {/* Notification Bell */}
  <div className="relative" ref={notifRef}>
  <button
  onClick={handleBellClick}
- className="p-2 rounded-full hover:bg-white/10 relative group"
+ className="p-2 rounded-full hover:bg-gray-200 dark:bg-white/10 relative group"
  aria-label="Notifications"
  >
- <Bell className={`w-5 h-5 ${notifOpen ? 'text-white' : 'text-gray-300 group-hover:text-white'}`} />
+ <Bell className={`w-5 h-5 ${notifOpen ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:text-white'}`} />
  {/* Unread badge */}
  {unreadCount > 0 && (
- <span className="absolute top-1 right-1 min-w-[16px] h-4 px-0.5 bg-violet-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center leading-none">
+ <span className="absolute top-1 right-1 min-w-[16px] h-4 px-0.5 bg-violet-500 rounded-full text-[9px] font-bold text-gray-900 dark:text-white flex items-center justify-center leading-none">
  {unreadCount > 9 ? '9+' : unreadCount}
  </span>
  )}
@@ -85,12 +96,12 @@ const Navbar = () => {
 
  {/* Notification Panel */}
  {notifOpen && (
- <div className="absolute right-0 top-12 w-80 rounded-2xl border border-white/10 bg-[#0f0f18]/95 backdrop-blur-xl shadow-2xl shadow-black/60 overflow-hidden z-50">
+ <div className="absolute right-0 top-12 w-80 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0f0f18]/95 backdrop-blur-xl shadow-2xl shadow-black/60 overflow-hidden z-50">
  {/* Header */}
- <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+ <div className="px-5 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
  <div>
- <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Notifications</p>
- <h3 className="text-base font-semibold text-white mt-0.5">
+ <p className="text-xs text-gray-600 dark:text-gray-400 font-medium uppercase tracking-wider">Notifications</p>
+ <h3 className="text-base font-semibold text-gray-900 dark:text-white mt-0.5">
  Welcome, <span className="text-fuchsia-400">{user?.name}</span> 👋
  </h3>
  </div>
@@ -110,18 +121,18 @@ const Navbar = () => {
  <div className="max-h-80 overflow-y-auto divide-y divide-white/5">
  {notifications.length === 0 ? (
  <div className="flex flex-col items-center justify-center py-10 px-5 gap-3 text-center">
- <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-1">
+ <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-1">
  <BellOff className="w-6 h-6 text-gray-500" />
  </div>
- <p className="text-sm font-medium text-white/50">No new notifications</p>
+ <p className="text-sm font-medium text-gray-900 dark:text-white/50">No new notifications</p>
  <p className="text-xs text-gray-600">You're all caught up! Generate a post to see activity here.</p>
  </div>
  ) : (
  notifications.map(notif => (
- <div key={notif._id || notif.id} className={`flex items-start gap-3 px-4 py-3.5 hover:bg-white/5 ${!notif.isRead ? 'bg-fuchsia-500/5' : ''}`}>
+ <div key={notif._id || notif.id} className={`flex items-start gap-3 px-4 py-3.5 hover:bg-gray-100 dark:bg-white/5 ${!notif.isRead ? 'bg-fuchsia-500/5' : ''}`}>
  {/* Thumbnail or icon */}
  {notif.type === 'post_generating' ? (
- <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+ <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0">
  <div className="w-5 h-5 border-2 border-fuchsia-500 border-t-transparent rounded-full " />
  </div>
  ) : notif.type === 'post_failed' ? (
@@ -132,16 +143,16 @@ const Navbar = () => {
  <img
  src={notif.imageLink}
  alt="post thumb"
- className="w-10 h-10 rounded-lg object-cover shrink-0 border border-white/10"
+ className="w-10 h-10 rounded-lg object-cover shrink-0 border border-gray-200 dark:border-white/10"
  />
  ) : (
- <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+ <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0">
  <Image className="w-5 h-5 text-fuchsia-400" />
  </div>
  )}
  <div className="flex-1 min-w-0">
- <p className="text-sm font-semibold text-white">{notif.title}</p>
- <p className="text-xs text-gray-400 truncate mt-0.5">{notif.message}</p>
+ <p className="text-sm font-semibold text-gray-900 dark:text-white">{notif.title}</p>
+ <p className="text-xs text-gray-600 dark:text-gray-400 truncate mt-0.5">{notif.message}</p>
  {notif.prompt && (
  <p className="text-xs text-gray-600 truncate mt-0.5 italic">"{notif.prompt?.substring(0, 50)}..."</p>
  )}

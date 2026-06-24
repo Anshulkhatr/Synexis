@@ -97,6 +97,26 @@ const profileSlice = createSlice({
                 state.profileError = true
                 state.profileErrorMessage = action.payload
             })
+            .addCase(updateProfileDetails.pending, (state) => {
+                state.profileLoading = true
+                state.profileSuccess = false
+                state.profileError = false
+            })
+            .addCase(updateProfileDetails.fulfilled, (state, action) => {
+                state.profileLoading = false
+                state.profileSuccess = true
+                if (state.profile) {
+                    state.profile.name = action.payload.name
+                    state.profile.bio = action.payload.bio
+                }
+                state.profileError = false
+            })
+            .addCase(updateProfileDetails.rejected, (state, action) => {
+                state.profileLoading = false
+                state.profileSuccess = false
+                state.profileError = true
+                state.profileErrorMessage = action.payload
+            })
     }
 });
 
@@ -137,12 +157,21 @@ export const unfollow = createAsyncThunk("UNFOLLOW/PROFILE", async (uid, thunkAP
     }
 })
 
-export const updateImage = createAsyncThunk("UPDATE/IMAGE", async (formData, thunkAPI) => {
-
+export const updateImage = createAsyncThunk("PROFILE/IMAGE/UPDATE", async (formData, thunkAPI) => {
     let token = thunkAPI.getState().auth.user.token
-
     try {
         return await profileService.updateAvatar(formData, token)
+    } catch (error) {
+        let message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// Update Profile Details
+export const updateProfileDetails = createAsyncThunk("PROFILE/DETAILS/UPDATE", async (userData, thunkAPI) => {
+    let token = thunkAPI.getState().auth.user.token
+    try {
+        return await profileService.updateDetails(userData, token)
     } catch (error) {
         let message = error.response.data.message
         return thunkAPI.rejectWithValue(message)

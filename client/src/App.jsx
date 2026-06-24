@@ -7,6 +7,7 @@ import Feed from './pages/Feed';
 import Explore from './pages/Explore';
 import Generate from './pages/Generate';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import PostDetail from './pages/PostDetail';
 import Chat from './pages/Chat';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -16,11 +17,13 @@ import AdminReports from './pages/admin/AdminReports';
 import { ToastContainer } from 'react-toastify';
 import PrivateComponent from './components/PrivateComponent';
 import PrivateAdminComponent from './components/admin/PrivateAdminComponent';
+import { ThemeProvider } from './context/ThemeContext';
 
 
 
 const App = () => {
  return (
+ <ThemeProvider>
  <BrowserRouter>
  <div className="flex h-screen overflow-hidden">
 
@@ -37,6 +40,7 @@ const App = () => {
  <Route path='explore' element={<Explore />} />
  <Route path='generate' element={<Generate />} />
  <Route path='profile/:username' element={<Profile />} />
+ <Route path='settings' element={<Settings />} />
  <Route path='chat' element={<Chat />} />
  </Route>
 
@@ -53,6 +57,7 @@ const App = () => {
  </div>
  <ToastContainer />
  </BrowserRouter>
+ </ThemeProvider>
  )
 }
 

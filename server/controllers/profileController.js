@@ -124,7 +124,38 @@ const updateAvatar = async (req, res) => {
 
 
 
-const profileController = { getMyFollowers, getMyFollowings, getProfile, updateAvatar }
+const updateDetails = async (req, res) => {
+    const { name, bio } = req.body;
+    
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404);
+            throw new Error("User Not Found!");
+        }
 
+        user.name = name || user.name;
+        user.bio = bio !== undefined ? bio : user.bio;
+        
+        await user.save();
+        
+        res.status(200).json({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+            bio: user.bio,
+            credits: user.credits,
+            isAdmin: user.isAdmin,
+            isActive: user.isActive,
+            createdAt: user.createdAt
+        });
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message || "Failed to update profile details");
+    }
+}
+
+const profileController = { getMyFollowers, getMyFollowings, getProfile, updateAvatar, updateDetails }
 
 export default profileController

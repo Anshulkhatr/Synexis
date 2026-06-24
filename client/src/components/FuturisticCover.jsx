@@ -40,7 +40,7 @@ const FuturisticCover = () => {
             {particles.map(p => (
                 <div 
                     key={p.id}
-                    className="absolute bg-white/20 rounded-full animate-pulse"
+                    className="absolute bg-gray-300 dark:bg-white/20 rounded-full animate-pulse"
                     style={{
                         left: p.left,
                         top: p.top,
@@ -131,7 +131,7 @@ const FuturisticCover = () => {
                     <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_cyan]"></span>
                     <span className="text-[9px] font-mono font-bold text-cyan-400 tracking-[0.2em] uppercase">Core_System</span>
                 </div>
-                <div className="flex items-center gap-4 text-[8px] font-mono text-white/50">
+                <div className="flex items-center gap-4 text-[8px] font-mono text-gray-900 dark:text-white/50">
                     <span>SYNCING: 99.9%</span>
                     <span>TEMP: 32°C</span>
                 </div>
@@ -140,7 +140,7 @@ const FuturisticCover = () => {
             <div className="absolute top-8 right-8 glossy-hud p-4 rounded-xl flex flex-col items-end gap-1 overflow-hidden group">
                 <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-magenta-400 to-transparent"></div>
                 <div className="text-[9px] font-mono font-bold text-magenta-400 tracking-[0.2em] uppercase">Packet_Steam</div>
-                <div className="text-[10px] font-mono text-white/70">STRM ID: {telemetry}</div>
+                <div className="text-[10px] font-mono text-gray-900 dark:text-white/70">STRM ID: {telemetry}</div>
                 <div className="w-24 h-[1px] bg-magenta-900/30 mt-2 overflow-hidden rounded-full">
                     <div className="h-full bg-magenta-500 w-1/2 animate-[telemetry-bar-fast_1.5s_linear_infinite]"></div>
                 </div>

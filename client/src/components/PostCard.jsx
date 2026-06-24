@@ -13,7 +13,7 @@ const PostCard = ({ post }) => {
  return (
  <Link
  to={`/auth/post/${post._id}`}
- className="group block relative rounded-2xl overflow-hidden mb-4 break-inside-avoid shadow-lg shadow-violet-900/5 hover:shadow-violet-900/20 cursor-zoom-in bg-white/5"
+ className="group block relative rounded-2xl overflow-hidden mb-4 break-inside-avoid shadow-lg shadow-violet-900/5 hover:shadow-violet-900/20 cursor-zoom-in bg-gray-100 dark:bg-white/5"
  >
  {/* Image */}
  <img
@@ -42,8 +42,8 @@ const PostCard = ({ post }) => {
  }}>
  <UserAvatar src={post?.user?.avatar} alt={post?.user?.name} size="sm" />
  <div>
- <p className="text-xs font-bold text-white leading-tight">{post?.user?.name}</p>
- <p className="text-[10px] text-gray-400">@{post?.user?.name}</p>
+ <p className="text-xs font-bold text-gray-900 dark:text-white leading-tight">{post?.user?.name}</p>
+ <p className="text-[10px] text-gray-600 dark:text-gray-400">@{post?.user?.name}</p>
  </div>
  </div>
  </div>

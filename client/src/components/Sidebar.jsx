@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, PlusSquare, User, Sparkles, Settings, LogOut, LayoutDashboard, MessageSquare, Bell, X } from 'lucide-react';
+import { Home, Compass, PlusSquare, User, Sparkles, Settings, LogOut, LayoutDashboard, MessageSquare, Bell, X, Sun, Moon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '../context/ThemeContext';
 import { logoutUser } from '../features/auth/authSlice';
 import { resetProfile } from '../features/profile/profileSlice';
 import { fetchNotifications, markNotificationRead, markAllNotificationsRead } from '../features/notifications/notificationSlice';
@@ -11,6 +12,7 @@ const Sidebar = () => {
  const { user, isSuccess } = useSelector(state => state.auth)
  const { items: notifications } = useSelector(state => state.notifications)
  const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+ const { theme, toggleTheme } = useTheme();
  
  if (!user) return null;
 
@@ -44,7 +46,7 @@ const Sidebar = () => {
  return (
  <>
  {/* Desktop Sidebar */}
- <aside className="hidden md:flex flex-col w-64 h-full border-r border-white/10 glass-card bg-[#0a0a0f]/95 shrink-0">
+ <aside className="hidden md:flex flex-col w-64 h-full border-r border-gray-200 dark:border-white/10 glass-card bg-gray-50 dark:bg-[#0a0a0f]/95 shrink-0">
  <div className="p-6">
  <Link to="/auth/feed" className="flex items-center gap-2 group">
  <Sparkles className="text-violet-500 w-8 h-8 group-hover:" />
@@ -62,7 +64,7 @@ const Sidebar = () => {
  className={({ isActive }) =>
  `flex items-center gap-4 px-4 py-3 rounded-xl relative ${isActive
  ? 'bg-violet-600/20 text-violet-400'
- : 'text-gray-400 hover:text-white hover:bg-white/5'
+ : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-white/5'
  }`
  }
  >
@@ -76,16 +78,20 @@ const Sidebar = () => {
  </nav>
 
  <div className="p-4 mb-4 mt-auto">
- <button onClick={() => setIsPanelOpen(true)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-violet-400 cursor-pointer w-full relative">
+ <button onClick={toggleTheme} className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-white/5 hover:text-violet-400 cursor-pointer w-full relative">
+ {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+ <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+ </button>
+ <button onClick={() => setIsPanelOpen(true)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-white/5 hover:text-violet-400 cursor-pointer w-full relative mt-1">
  <Bell className="w-5 h-5" />
  <span>Notifications</span>
  {unreadCount > 0 && (
-   <span className="absolute right-4 bg-fuchsia-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+   <span className="absolute right-4 bg-fuchsia-500 text-gray-900 dark:text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
      {unreadCount}
    </span>
  )}
  </button>
- <button onClick={handleLogout} className="flex items-center gap-4 px-4 py-3 w-full rounded-xl text-gray-400 hover:bg-white/5 hover:text-violet-400 cursor-pointer mt-1">
+ <button onClick={handleLogout} className="flex items-center gap-4 px-4 py-3 w-full rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-white/5 hover:text-violet-400 cursor-pointer mt-1">
  <LogOut className="w-5 h-5" />
  <span>Log out</span>
  </button>
@@ -95,9 +101,9 @@ const Sidebar = () => {
  {/* Notification Slide-out Panel */}
  {isPanelOpen && (
    <div className="fixed inset-0 z-[100] flex">
-     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsPanelOpen(false)} />
-     <div className="relative w-80 md:w-96 bg-[#0a0a0f] border-r border-white/10 h-full flex flex-col shadow-2xl animate-slide-in-left">
-       <div className="p-4 border-b border-white/10 flex justify-between items-center">
+     <div className="absolute inset-0 bg-white dark:bg-black/50 backdrop-blur-sm" onClick={() => setIsPanelOpen(false)} />
+     <div className="relative w-80 md:w-96 bg-gray-50 dark:bg-[#0a0a0f] border-r border-gray-200 dark:border-white/10 h-full flex flex-col shadow-2xl animate-slide-in-left">
+       <div className="p-4 border-b border-gray-200 dark:border-white/10 flex justify-between items-center">
          <h2 className="text-xl font-syne font-bold flex items-center gap-2">
            <Bell className="text-fuchsia-500 w-5 h-5" /> Notifications
          </h2>
@@ -105,7 +111,7 @@ const Sidebar = () => {
            <button onClick={() => dispatch(markAllNotificationsRead())} className="text-xs text-violet-400 hover:text-violet-300">
              Mark all read
            </button>
-           <button onClick={() => setIsPanelOpen(false)} className="p-1 rounded-full hover:bg-white/10 text-gray-400">
+           <button onClick={() => setIsPanelOpen(false)} className="p-1 rounded-full hover:bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-400">
              <X className="w-5 h-5" />
            </button>
          </div>
@@ -121,13 +127,13 @@ const Sidebar = () => {
                  navigate('/auth/chat');
                }
              }}
-             className={`p-3 rounded-xl border cursor-pointer transition ${notif.isRead ? 'bg-white/5 border-transparent opacity-70' : 'bg-violet-900/20 border-violet-500/30 shadow-lg'}`}
+             className={`p-3 rounded-xl border cursor-pointer transition ${notif.isRead ? 'bg-gray-100 dark:bg-white/5 border-transparent opacity-70' : 'bg-violet-900/20 border-violet-500/30 shadow-lg'}`}
            >
              <div className="flex gap-3 items-center">
                {notif.sender?.avatar ? (
                  <img src={notif.sender.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
                ) : (
-                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-white">
+                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-gray-900 dark:text-white">
                    {notif.sender?.name?.charAt(0)?.toUpperCase()}
                  </div>
                )}
@@ -152,13 +158,13 @@ const Sidebar = () => {
  )}
 
  {/* Mobile Bottom Bar */}
- <div className="md:hidden fixed bottom-0 w-full h-16 glass-card border-t border-white/10 bg-[#0a0a0f]/95 z-50 flex items-center justify-around px-2">
+ <div className="md:hidden fixed bottom-0 w-full h-16 glass-card border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0a0f]/95 z-50 flex items-center justify-around px-2">
  {navItems.map((item) => (
  <NavLink
  key={item.label}
  to={item.path}
  className={({ isActive }) =>
- `flex flex-col items-center justify-center w-full h-full ${isActive ? 'text-violet-400' : 'text-gray-500 hover:text-gray-300'
+ `flex flex-col items-center justify-center w-full h-full ${isActive ? 'text-violet-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-300'
  }`
  }
  >
@@ -169,9 +175,9 @@ const Sidebar = () => {
   {/* Mobile Bottom Bar Notifications Button */}
   <div className="fixed bottom-20 right-4 md:hidden z-50">
     <button onClick={() => setIsPanelOpen(true)} className="bg-violet-600 p-3 rounded-full shadow-[0_0_15px_rgba(139,92,246,0.5)] relative">
-      <Bell className="w-6 h-6 text-white" />
+      <Bell className="w-6 h-6 text-gray-900 dark:text-white" />
       {unreadCount > 0 && (
-        <span className="absolute -top-1 -right-1 bg-fuchsia-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md border-2 border-[#0a0a0f]">
+        <span className="absolute -top-1 -right-1 bg-fuchsia-500 text-gray-900 dark:text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md border-2 border-[#0a0a0f]">
           {unreadCount}
         </span>
       )}

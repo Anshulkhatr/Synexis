@@ -52,6 +52,17 @@ const updateAvatar = async (formData, token) => {
 
 
 
-const profileService = { fetchProfile, sendFollowRequest, sendUnFollowRequest, updateAvatar }
+const updateDetails = async (userData, token) => {
+    let options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(API_URL + "/update", userData, options)
+    return response.data
+}
+
+const profileService = { fetchProfile, sendFollowRequest, sendUnFollowRequest, updateAvatar, updateDetails }
 
 export default profileService

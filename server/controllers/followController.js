@@ -1,4 +1,5 @@
 import User from "../models/userModel.js"
+import Notification from "../models/notificationModel.js"
 
 const followUserRequest = async (req, res) => {
 
@@ -25,6 +26,28 @@ const followUserRequest = async (req, res) => {
     // Add Following
     currentUser.following.push(targetUser._id)
     await currentUser.save()
+
+    // Create notification
+    const notification = new Notification({
+        type: 'follow',
+        sender: currentUser._id,
+        receiver: targetUser._id,
+        isRead: false
+    });
+    await notification.save();
+
+    const populatedNotification = await Notification.findById(notification._id)
+        .populate('sender', 'name avatar');
+
+    const io = req.app.get('io');
+    const onlineUsers = req.app.get('onlineUsers');
+    
+    if (io && onlineUsers) {
+        const receiverSocketId = onlineUsers.get(targetUser._id.toString());
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("new_notification", populatedNotification);
+        }
+    }
 
     res.status(200).json(targetUser)
 }

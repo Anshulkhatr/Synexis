@@ -130,7 +130,7 @@ const Chat = () => {
   return (
     <>
       <Sidebar />
-      <div className="flex-1 flex flex-col relative overflow-hidden bg-black text-white h-screen">
+      <div className="flex-1 flex flex-col relative overflow-hidden bg-white dark:bg-black text-gray-900 dark:text-white h-screen">
         <Navbar />
         
         <main className="flex-1 flex overflow-hidden pt-16 pb-20 md:pb-0 h-full">
@@ -140,24 +140,24 @@ const Chat = () => {
             {/* Contacts Sidebar List */}
             <div className={`w-full md:w-80 lg:w-96 flex flex-col glass-card rounded-3xl overflow-hidden h-full ${selectedContact ? 'hidden md:flex' : 'flex'}`}>
               {/* Header */}
-              <div className="p-4 border-b border-white/10 flex flex-col gap-4">
+              <div className="p-4 border-b border-gray-200 dark:border-white/10 flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-syne font-bold flex items-center gap-2">
                     <MessageSquare className="text-fuchsia-500 w-5 h-5" /> Chats
                   </h2>
-                  <span className="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-400 font-medium">
+                  <span className="text-xs bg-gray-200 dark:bg-white/10 px-2 py-1 rounded-full text-gray-600 dark:text-gray-400 font-medium">
                     {onlineUserIds.length - 1 > 0 ? `${onlineUserIds.length - 1} Online` : '0 Online'}
                   </span>
                 </div>
                 {/* Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-600 dark:text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search followers..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50"
+                    className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50"
                   />
                 </div>
               </div>
@@ -177,7 +177,7 @@ const Chat = () => {
                         key={contact._id}
                         onClick={() => setSelectedContact(contact)}
                         className={`w-full text-left p-3 rounded-2xl flex items-center gap-3 transition duration-200 ${
-                          isSelected ? 'bg-white/10 border border-white/10 shadow-lg' : 'hover:bg-white/5'
+                          isSelected ? 'bg-gray-200 dark:bg-white/10 border border-gray-200 dark:border-white/10 shadow-lg' : 'hover:bg-gray-100 dark:bg-white/5'
                         }`}
                       >
                         {/* Avatar Column */}
@@ -186,10 +186,10 @@ const Chat = () => {
                             <img
                               src={contact.avatar}
                               alt={contact.name}
-                              className="w-12 h-12 rounded-full object-cover border border-white/10"
+                              className="w-12 h-12 rounded-full object-cover border border-gray-200 dark:border-white/10"
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-lg text-white">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-lg text-gray-900 dark:text-white">
                               {contact.name.charAt(0).toUpperCase()}
                             </div>
                           )}
@@ -200,7 +200,7 @@ const Chat = () => {
                         {/* Name & last message details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <h3 className={`font-semibold truncate text-sm ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-bold' : ''}`}>
+                            <h3 className={`font-semibold truncate text-sm ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-gray-900 dark:text-white font-bold' : ''}`}>
                               {contact.name}
                               {isOnline && <span className="ml-2 text-[10px] text-green-400 font-normal">● Online</span>}
                             </h3>
@@ -210,7 +210,7 @@ const Chat = () => {
                               </span>
                             )}
                           </div>
-                          <p className={`text-xs truncate ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-white font-medium' : 'text-gray-400'}`}>
+                          <p className={`text-xs truncate ${contact.lastMessage && contact.lastMessage.sender !== user.id && !contact.lastMessage.isRead ? 'text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                             {contact.lastMessage ? (
                               contact.lastMessage.sender === user.id ? (
                                 `You: ${contact.lastMessage.message}`
@@ -241,11 +241,11 @@ const Chat = () => {
               {selectedContact ? (
                 <>
                   {/* Chat Window Header */}
-                  <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5 backdrop-blur-md">
+                  <div className="p-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between bg-gray-100 dark:bg-white/5 backdrop-blur-md">
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => setSelectedContact(null)}
-                        className="md:hidden p-1 hover:bg-white/10 rounded-full transition"
+                        className="md:hidden p-1 hover:bg-gray-200 dark:bg-white/10 rounded-full transition"
                       >
                         <ArrowLeft className="w-6 h-6" />
                       </button>
@@ -254,10 +254,10 @@ const Chat = () => {
                           <img
                             src={selectedContact.avatar}
                             alt={selectedContact.name}
-                            className="w-10 h-10 rounded-full object-cover border border-white/10"
+                            className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-white/10"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-white">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-gray-900 dark:text-white">
                             {selectedContact.name.charAt(0).toUpperCase()}
                           </div>
                         )}
@@ -265,7 +265,7 @@ const Chat = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-sm leading-tight">{selectedContact.name}</h3>
-                        <p className={`text-[10px] ${onlineUserIds.includes(selectedContact._id) ? 'text-green-400 font-medium' : 'text-gray-400'}`}>
+                        <p className={`text-[10px] ${onlineUserIds.includes(selectedContact._id) ? 'text-green-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                           {onlineUserIds.includes(selectedContact._id) ? '● Online' : 'Offline'}
                         </p>
                       </div>
@@ -290,8 +290,8 @@ const Chat = () => {
                               <div
                                 className={`px-4 py-2.5 rounded-2xl text-sm shadow-md ${
                                   isOwn
-                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-tr-none'
-                                    : 'bg-white/10 border border-white/10 text-white rounded-tl-none'
+                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-gray-900 dark:text-white rounded-tr-none'
+                                    : 'bg-gray-200 dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white rounded-tl-none'
                                 }`}
                               >
                                 {message.message}
@@ -313,7 +313,7 @@ const Chat = () => {
                     {/* Typing Indicator */}
                     {isOtherUserTyping && (
                       <div className="flex justify-start">
-                        <div className="bg-white/10 border border-white/10 px-4 py-2.5 rounded-2xl rounded-tl-none flex items-center gap-1">
+                        <div className="bg-gray-200 dark:bg-white/10 border border-gray-200 dark:border-white/10 px-4 py-2.5 rounded-2xl rounded-tl-none flex items-center gap-1">
                           <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                           <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
                           <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
@@ -324,18 +324,18 @@ const Chat = () => {
                   </div>
 
                   {/* Input form */}
-                  <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10 bg-white/5 flex gap-3 items-center">
+                  <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 flex gap-3 items-center">
                     <input
                       type="text"
                       placeholder="Write your message..."
                       value={typedMessage}
                       onChange={handleInputChange}
-                      className="flex-1 bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50"
+                      className="flex-1 bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50"
                     />
                     <button
                       type="submit"
                       disabled={!typedMessage.trim()}
-                      className="p-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-xl text-white hover:opacity-90 transition disabled:opacity-50"
+                      className="p-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-xl text-gray-900 dark:text-white hover:opacity-90 transition disabled:opacity-50"
                     >
                       <Send className="w-4 h-4" />
                     </button>
@@ -346,7 +346,7 @@ const Chat = () => {
                   <div className="w-20 h-20 bg-gradient-to-tr from-violet-600/20 to-fuchsia-600/20 rounded-full flex items-center justify-center border border-violet-500/20 shadow-lg shadow-violet-500/5">
                     <MessageSquare className="w-10 h-10 text-violet-500" />
                   </div>
-                  <h3 className="text-xl font-syne font-bold text-white/80">Direct Messaging</h3>
+                  <h3 className="text-xl font-syne font-bold text-gray-900 dark:text-white/80">Direct Messaging</h3>
                   <p className="text-sm text-gray-500 max-w-xs">
                     Select a follower or creator you follow from the list to start sharing ideas and artwork in real-time.
                   </p>

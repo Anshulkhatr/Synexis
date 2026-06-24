@@ -25,7 +25,7 @@ const AdminSidebar = () => {
  };
 
  return (
- <aside className="hidden md:flex flex-col w-64 h-full border-r border-white/10 glass-card bg-[#0a0a0f]/95 shrink-0">
+ <aside className="hidden md:flex flex-col w-64 h-full border-r border-gray-200 dark:border-white/10 glass-card bg-gray-50 dark:bg-[#0a0a0f]/95 shrink-0">
  <div className="p-6">
  <Link to="/admin/dashboard" className="flex items-center gap-2 group">
  <Sparkles className="text-violet-500 w-8 h-8 group-hover:" />
@@ -43,7 +43,7 @@ const AdminSidebar = () => {
  className={({ isActive }) =>
  `flex items-center gap-4 px-4 py-3 rounded-xl ${isActive
  ? 'bg-violet-600/20 text-violet-400 border-r-2 border-violet-500'
- : 'text-gray-400 hover:text-white hover:bg-white/5'
+ : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-white/5'
  }`
  }
  >
@@ -54,11 +54,11 @@ const AdminSidebar = () => {
  </nav>
 
  <div className="p-4 mb-4 mt-auto">
- <div className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-400 ">
+ <div className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 ">
  <ShieldCheck className="w-5 h-5 text-violet-400" />
  <span className="truncate">{user?.name || "Admin"}</span>
  </div>
- <button onClick={handleLogout} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-violet-400 cursor-pointer mt-1">
+ <button onClick={handleLogout} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-white/5 hover:text-violet-400 cursor-pointer mt-1">
  <LogOut className="w-5 h-5" />
  <span>Log out</span>
  </button>

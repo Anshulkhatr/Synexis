@@ -67,8 +67,8 @@ const AdminDashboard = () => {
  <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-8">
  {/* Header */}
  <div>
- <h1 className="font-syne text-3xl font-bold text-white">Dashboard</h1>
- <p className="text-gray-400 mt-1">Welcome back, {user?.name || "Admin"}</p>
+ <h1 className="font-syne text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+ <p className="text-gray-600 dark:text-gray-400 mt-1">Welcome back, {user?.name || "Admin"}</p>
  </div>
 
  {/* Stats Grid */}
@@ -76,10 +76,10 @@ const AdminDashboard = () => {
  {statCards.map((stat, idx) => (
  <div key={idx} className={`glass-card p-6 flex flex-col items-start relative overflow-hidden border-b-2 ${stat.border}`}>
  <div className="flex items-center justify-between w-full mb-4">
- <span className="text-gray-400 font-medium">{stat.label}</span>
+ <span className="text-gray-600 dark:text-gray-400 font-medium">{stat.label}</span>
  <stat.icon className={`w-5 h-5 ${stat.color} opacity-80`} />
  </div>
- <h2 className="text-3xl font-bold text-white">{stat.value}</h2>
+ <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</h2>
  </div>
  ))}
  </div>
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
  {/* Recent Users Table */}
  <div className="lg:col-span-2 space-y-4">
  <div className="flex items-center justify-between">
- <h2 className="font-syne text-xl font-bold text-white">Recent Users</h2>
+ <h2 className="font-syne text-xl font-bold text-gray-900 dark:text-white">Recent Users</h2>
  <Link to="/admin/users" className="text-sm text-violet-400 hover:text-violet-300 ">
  View All
  </Link>
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="border-b border-white/10 bg-white/5 text-gray-400 text-sm">
+ <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 text-sm">
  <th className="py-3 px-4 font-medium">User</th>
  <th className="py-3 px-4 font-medium">Email</th>
  <th className="py-3 px-4 font-medium">Status</th>
@@ -107,20 +107,20 @@ const AdminDashboard = () => {
  <tbody>
  {users.length > 0 ? (
  users.slice(0, 5).map((u) => (
- <tr key={u._id} className="border-b border-white/5 hover:bg-white/5 ">
+ <tr key={u._id} className="border-b border-gray-200 dark:border-white/5 hover:bg-gray-100 dark:bg-white/5 ">
  <td className="py-3 px-4">
  <div className="flex items-center gap-3">
  <UserAvatar src={u.avatar} alt={u.name} size="sm" />
- <span className="text-white font-medium">{u.name}</span>
+ <span className="text-gray-900 dark:text-white font-medium">{u.name}</span>
  </div>
  </td>
- <td className="py-3 px-4 text-gray-400">{u.email}</td>
+ <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{u.email}</td>
  <td className="py-3 px-4">
  <span className={`px-2 py-1 rounded-full text-xs font-medium ${u.isActive ? 'bg-green-500/20 text-green-400' : 'bg-indigo-500/20 text-indigo-400'}`}>
  {u.isActive ? 'Active' : 'Banned'}
  </span>
  </td>
- <td className="py-3 px-4 text-gray-300">{u.credits}</td>
+ <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{u.credits}</td>
  </tr>
  ))
  ) : (
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
  {/* Recent Reports */}
  <div className="space-y-4">
  <div className="flex items-center justify-between">
- <h2 className="font-syne text-xl font-bold text-white">Recent Reports</h2>
+ <h2 className="font-syne text-xl font-bold text-gray-900 dark:text-white">Recent Reports</h2>
  <Link to="/admin/reports" className="text-sm text-violet-400 hover:text-violet-300 ">
  View All
  </Link>
@@ -147,8 +147,8 @@ const AdminDashboard = () => {
  <div className="space-y-3">
  {reports.length > 0 ? (
  reports.slice(0, 3).map((report) => (
- <div key={report._id} className="glass-card p-4 hover:bg-white/5 ">
- <p className="text-white text-sm font-medium line-clamp-2 mb-1">"{report.text}"</p>
+ <div key={report._id} className="glass-card p-4 hover:bg-gray-100 dark:bg-white/5 ">
+ <p className="text-gray-900 dark:text-white text-sm font-medium line-clamp-2 mb-1">"{report.text}"</p>
  <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
  <span>
  <span>By @{report.user?.name}</span>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark, .dark *));
 
 @theme {
   --animate-blob: blob 7s infinite;
@@ -41,7 +42,7 @@
 
 @layer base {
   body {
-    @apply bg-[#0a0a0f] text-white;
+    @apply bg-gray-50 dark:bg-[#0a0a0f] text-gray-900 dark:text-white;
   }
 
   /* Custom Glowing Scrollbar */
@@ -74,7 +75,7 @@
 }
 
 .glass-card {
-  @apply bg-white/5 backdrop-blur-md border border-white/10;
+  @apply bg-gray-100 dark:bg-white/5 backdrop-blur-md border border-gray-200 dark:border-white/10;
 }
 
 .animation-delay-2000 {
